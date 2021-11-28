@@ -12,10 +12,38 @@ s2 = 0
 
 init()
 win = display.set_mode((700, 500))
+g_name1 = 'Clara Oswald'
+g_name2 = 'The Doctor'
 
+def an1(name1):
+    global g_name1
+    print('Player name is: ', name1)
+    g_name1 = name1
+
+def an2(name2):
+    global g_name2
+    print('Player name is: ', name2)
+    g_name2 = name2
+
+def set_difficulty(*args):
+    global sx, sy, wscr
+
+    if args[1] == 3:
+        sx = 4
+        sy = 5
+        wscr = 4
+    if args[1] == 2:
+        sx = 3
+        sy = 4
+        wscr = 3
+    if args[1] == 1:
+        sx = 6
+        sy = 7
+        wscr = 5
 
 def start_the_game():
     global s1, s2
+    global g_name1, g_name2
 
     class Gs(sprite.Sprite):
         def __init__(self, player_img, player_x, player_y, player_w, player_h, player_speed):
@@ -61,21 +89,25 @@ def start_the_game():
             s2 += 1
     display.set_caption('Ping Pong')
 
-    r1 = Player('racket1.png',
+    r1 = Player('C:/Users/User/Desktop/ping-pong(Nick)/racket1.png',
                 10, 250, 20, 60, 4)
-    r2 = Player('racket2.png',
+    r2 = Player('C:/Users/User/Desktop/ping-pong(Nick)/racket2.png',
                 675, 250, 20, 60, 4)
 
-    ball = Player('ball.png', 350, 250, 45, 45, 0)
+    ball = Player('C:/Users/User/Desktop/ping-pong(Nick)/ball.png', 350, 250, 45, 45, 0)
+
 
     clock = time.Clock()
     fps = 60
 
     font1 = font.SysFont('ComicSansMC', 70)
+    font2 = font.SysFont('ComicSansMC', 40)
     lose1 = font1.render('Player 1 Lose', True, (150, 150, 150))
     lose2 = font1.render('Player 2 Lose', True, (150, 150, 150))
     win1 = font1.render('Player 1 Wins', True, (150, 150, 150))
     win2 = font1.render('Player 2 Wins', True, (150, 150, 150))
+    n1 = font2.render(str(g_name1), True, (164, 224, 43))
+    n2 = font2.render(str(g_name2), True, (213, 134, 11))
 
     game = True
     fin = False
@@ -94,6 +126,8 @@ def start_the_game():
 
             score1 = font1.render(str(s1), True, (0, 0, 0))
             score2 = font1.render(str(s2), True, (0, 0, 0))
+            win.blit(n1, (50, 50))
+            win.blit(n2, (500, 50))
 
             scr_count()
 
@@ -137,8 +171,9 @@ def start_the_game():
 
 m = pygame_menu.Menu('Welcome!', 400, 300, theme=pygame_menu.themes.THEME_BLUE)
 
-m.add.text_input('Name: ', default='Clara Oswald')
-#!m.add.selector('Difficulty:', [('Hard', 1), ('easy', 2)])
+m.add.text_input('Name 1: ', default='Clara Oswald', onchange=an1)
+m.add.text_input('Name 2: ', default='The Doctor', onchange=an2)
+m.add.selector('Difficulty', [('Hard', 1), ("Easy", 2), ("Normal", 3)], onchange=set_difficulty)
 m.add.button('Play', start_the_game)
 m.add.button('Quit', pygame_menu.events.EXIT)
 
